@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dev.nil</groupId>
-    <artifactId>springbootlab</artifactId>
+    <artifactId>sideflow</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-boot-lab</name>
     <description>

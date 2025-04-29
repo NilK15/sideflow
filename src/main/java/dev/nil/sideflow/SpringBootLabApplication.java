@@ -1,4 +1,4 @@
-package dev.nil.springbootlab;
+package dev.nil.sideflow;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

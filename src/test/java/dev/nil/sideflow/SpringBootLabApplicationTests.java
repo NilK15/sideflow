@@ -1,4 +1,4 @@
-package dev.nil.springbootlab;
+package dev.nil.sideflow;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
