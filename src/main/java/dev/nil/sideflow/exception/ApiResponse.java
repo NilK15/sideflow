@@ -1,11 +1,13 @@
 package dev.nil.sideflow.exception;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
 import java.util.List;
 
 @Data
+@Builder
 public class ApiResponse<T> {
 
     private final Instant timestamp;

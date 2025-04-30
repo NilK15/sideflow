@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -13,8 +13,10 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-boot-lab</name>
     <description>
-        A banking application to solidify fundamentals and to learn new concepts. This is going to be monolithic
-        in nature in the beginning, transitioning to a modular package-based approach, to ultimately microservice
+        A banking application to solidify fundamentals and to learn new concepts. This is going to be
+        monolithic
+        in nature in the beginning, transitioning to a modular package-based approach, to ultimately
+        microservice
         oriented.
     </description>
     <url/>
@@ -63,6 +65,15 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
         </dependency>
     </dependencies>
 

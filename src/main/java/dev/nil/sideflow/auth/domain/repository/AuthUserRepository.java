@@ -1,4 +1,5 @@
 package dev.nil.sideflow.auth.domain.repository;
+
 import dev.nil.sideflow.auth.domain.model.AuthUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
