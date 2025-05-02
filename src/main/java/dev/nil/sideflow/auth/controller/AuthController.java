@@ -37,9 +37,7 @@ public class AuthController {
                                                 .loginRequestResource(request)
                                                 .build();
 
-        authService.loginUser(loginCommand);
-
-
+        return authService.loginUser(loginCommand);
     }
 
 }

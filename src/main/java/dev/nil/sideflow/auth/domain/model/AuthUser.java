@@ -27,6 +27,7 @@ public class AuthUser {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AuthUserRole> userRoles;
 
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AuthRefreshToken> refreshTokens;
 }
