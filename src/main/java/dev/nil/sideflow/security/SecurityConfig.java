@@ -4,6 +4,8 @@ import dev.nil.sideflow.auth.domain.repository.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,12 +28,15 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/**")
+                    .requestMatchers("/api/auth/login", "/api/auth/register", "/error")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
             )
-            .csrf(AbstractHttpConfigurer::disable) // modern lambda-style CSRF disable
+            .csrf(AbstractHttpConfigurer::disable)
+            // Added Jwttokenfilter before
+            //The UsernamePasswordAuthenticationFilter is only run on /login path - that is hardcoded in
+            // spring class's constructor
             .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -40,6 +45,16 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // Need to define this as part of setup so we have an authentication manager
+    // the AuthenticationConfiguration is something Spring will provide automatically
+    // The authenticationManager has a bunch of different providers, like DAO, JWT, etc, and loops
+    // through it based on what it sees in its componenet scanning. It sees UserDetailsservice and
+    // PasswordEncoder in our case, so it knows to use DAOProvider
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
 }

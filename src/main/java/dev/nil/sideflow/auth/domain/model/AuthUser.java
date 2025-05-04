@@ -15,14 +15,17 @@ import java.util.UUID;
 @Builder
 public class AuthUser {
     @Id
-    @GeneratedValue
+//    @GeneratedValue
     private UUID id;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String username;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AuthUserRole> userRoles;

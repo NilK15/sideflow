@@ -15,5 +15,5 @@ public class RegisterRequestResource {
     private String password;
 
     @NotBlank(message = "Username is required.")
-    private String userName;
+    private String username;
 }

@@ -1,7 +1,6 @@
 spring:
   application:
     name: spring-boot-lab
-
   datasource:
     url: jdbc:postgresql://localhost:5432/finance_tracker
     username: finance_user
@@ -16,3 +15,10 @@ spring:
 jwt:
   secret: z6AaovapckhRyuf17zAM3wvjdr3LncORjMde5cFjkRo
   expiration: 3600000
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+

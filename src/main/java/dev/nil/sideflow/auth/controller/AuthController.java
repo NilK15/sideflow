@@ -1,10 +1,7 @@
 package dev.nil.sideflow.auth.controller;
 
-import dev.nil.sideflow.auth.domain.command.LoginCommand;
 import dev.nil.sideflow.auth.domain.model.AuthUser;
-import dev.nil.sideflow.auth.dto.LoginRequestResource;
-import dev.nil.sideflow.auth.dto.LoginResponse;
-import dev.nil.sideflow.auth.dto.RegisterRequestResource;
+import dev.nil.sideflow.auth.dto.*;
 import dev.nil.sideflow.auth.mapper.AuthMapper;
 import dev.nil.sideflow.auth.service.AuthService;
 import jakarta.validation.Valid;
@@ -23,7 +20,7 @@ public class AuthController {
     private final AuthMapper authMapper;
 
     @PostMapping("/register")
-    public AuthUser register(@Valid @RequestBody RegisterRequestResource request) {
+    public AuthUserDto register(@Valid @RequestBody RegisterRequestResource request) {
 
         AuthUser authUser = authMapper.convertToAuthUser(request);
 
@@ -33,11 +30,11 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequestResource request) {
 
-        LoginCommand loginCommand = LoginCommand.builder()
-                                                .loginRequestResource(request)
-                                                .build();
+        // Do this or use a mapper, whats better?
+        LoginDto loginDto = LoginDto.builder()
+                                    .loginRequestResource(request)
+                                    .build();
 
-        return authService.loginUser(loginCommand);
+        return authService.loginUser(loginDto);
     }
-
 }
