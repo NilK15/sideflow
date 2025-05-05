@@ -111,16 +111,13 @@ public class AuthService {
 
         // Ensure user exists in db
         authUserRepository.findByEmail(loginDto
-                                  .loginRequest()
-                                  .getEmail())
+                                  .email())
                           .orElseThrow(() -> new IllegalStateException("User doesn't exist"));
 
         // jwt implementation to get access token
         String token = authenticateUser(
-                loginDto.loginRequest()
-                        .getEmail(),
-                loginDto.loginRequest()
-                        .getPassword());
+                loginDto.email(),
+                loginDto.password());
 
         return LoginResponse.builder()
                             .token(token)

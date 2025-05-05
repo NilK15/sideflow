@@ -44,6 +44,7 @@ public class CoreServiceImpl implements CoreService {
         UserProfile userProfile = UserProfile.builder()
                                              .authUser(authUser)
                                              .email(authUser.getEmail())
+                                             .username(authUser.getUsername())
                                              .build();
 
         userProfileRepository.save(userProfile);

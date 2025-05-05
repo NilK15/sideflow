@@ -39,7 +39,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         String email = jwtTokenProvider.getEmail(token);
-        Optional<AuthUser> userOptional = authUserRepository.findByEmail(email);
+        Optional<AuthUser> userOptional = authUserRepository.findByEmailWithRoles(email);
 
         if (userOptional.isEmpty()) {
             filterChain.doFilter(request, response);

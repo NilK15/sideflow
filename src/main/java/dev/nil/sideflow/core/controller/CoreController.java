@@ -2,6 +2,7 @@ package dev.nil.sideflow.core.controller;
 
 import dev.nil.sideflow.core.dto.UserProfileDto;
 import dev.nil.sideflow.core.dto.UserProfileRequest;
+import dev.nil.sideflow.core.dto.UserProfileResponse;
 import dev.nil.sideflow.core.mapper.CoreMapper;
 import dev.nil.sideflow.core.service.CoreService;
 import jakarta.validation.Valid;
@@ -20,13 +21,12 @@ public class CoreController {
     private final CoreMapper coreMapper;
 
     @GetMapping("/me")
-    public String getUserProfile(@Valid @RequestBody UserProfileRequest request) {
+    public UserProfileResponse getUserProfile(@Valid @RequestBody UserProfileRequest request) {
 
         UserProfileDto userProfile = coreMapper.convertToUserProfile(request);
 
-        coreService.getUserProfile(userProfile);
+        return coreService.getUserProfile(userProfile);
 
-        return null;
     }
 
 
