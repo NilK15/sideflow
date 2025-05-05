@@ -1,6 +1,5 @@
 package dev.nil.sideflow.auth.controller;
 
-import dev.nil.sideflow.auth.domain.model.AuthUser;
 import dev.nil.sideflow.auth.dto.*;
 import dev.nil.sideflow.auth.mapper.AuthMapper;
 import dev.nil.sideflow.auth.service.AuthService;
@@ -20,21 +19,18 @@ public class AuthController {
     private final AuthMapper authMapper;
 
     @PostMapping("/register")
-    public AuthUserDto register(@Valid @RequestBody RegisterRequestResource request) {
-
-        AuthUser authUser = authMapper.convertToAuthUser(request);
-
-        return authService.registerUser(authUser);
+    public AuthUserDto register(@Valid @RequestBody RegisterRequest request) {
+        // Sanitation, incase request has a bunch of other garbage fields coming in from some client -
+        // mainly for public apis
+        RegisterDto registerDto = authMapper.convertToRegisterDto(request);
+        return authService.registerUser(registerDto);
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@Valid @RequestBody LoginRequestResource request) {
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
 
-        // Do this or use a mapper, whats better?
-        LoginDto loginDto = LoginDto.builder()
-                                    .loginRequestResource(request)
-                                    .build();
-
+        LoginDto loginDto = authMapper.convertToLoginDto(request);
         return authService.loginUser(loginDto);
     }
+
 }

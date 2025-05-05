@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class LoginRequestResource {
+public class RegisterRequest {
 
     @Email(message = "Email is not valid.")
     @NotBlank(message = "Email is required.")
@@ -13,4 +13,7 @@ public class LoginRequestResource {
 
     @NotBlank(message = "Password is required.")
     private String password;
+
+    @NotBlank(message = "Username is required.")
+    private String username;
 }
