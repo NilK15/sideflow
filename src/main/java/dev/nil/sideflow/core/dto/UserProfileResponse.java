@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 public class UserProfileResponse {
 
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String username;
     private String email;
-    private String notification;
-    private String isPremium;
+    private String notifications;
+    private Boolean isPremium;
 }

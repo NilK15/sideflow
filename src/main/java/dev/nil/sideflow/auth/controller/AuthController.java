@@ -1,7 +1,12 @@
 package dev.nil.sideflow.auth.controller;
 
-import dev.nil.sideflow.auth.dto.*;
+import dev.nil.sideflow.auth.dto.AuthUserDto;
+import dev.nil.sideflow.auth.dto.LoginRequestDto;
+import dev.nil.sideflow.auth.dto.LoginResponseDto;
+import dev.nil.sideflow.auth.dto.RegisterDto;
 import dev.nil.sideflow.auth.mapper.AuthMapper;
+import dev.nil.sideflow.auth.rest.LoginRequest;
+import dev.nil.sideflow.auth.rest.RegisterRequest;
 import dev.nil.sideflow.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +32,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+    public LoginResponseDto login(@Valid @RequestBody LoginRequest request) {
 
-        LoginDto loginDto = authMapper.convertToLoginDto(request);
-        return authService.loginUser(loginDto);
+        LoginRequestDto loginRequestDto = authMapper.convertToLoginDto(request);
+        return authService.loginUser(loginRequestDto);
     }
 
 }

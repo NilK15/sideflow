@@ -1,11 +1,7 @@
 package dev.nil.sideflow.auth.service;
 
-import dev.nil.sideflow.auth.domain.model.AuthUser;
-import dev.nil.sideflow.auth.domain.model.AuthUserRole;
 import dev.nil.sideflow.auth.domain.repository.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,17 +29,17 @@ public class CustomerUserDetailService implements UserDetailsService {
     // 3. load username for identity (email in our case)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AuthUser user = authUserRepository.findByEmail(username)
-                                          .orElseThrow(() -> new UsernameNotFoundException("User not " +
-                                                  "found"));
-        return new User(
-                user.getEmail(),
-                user.getPassword(),
-                user.getUserRoles()
-                    .stream()
-                    .map(AuthUserRole::getRole)
-                    .map(role -> new SimpleGrantedAuthority(role.getName()))
-                    .toList()
-        );
+        return authUserRepository.findByEmail(username)
+                                 .orElseThrow(() -> new UsernameNotFoundException("User not " +
+                                         "found"));
+//        return new User(
+//                user.getEmail(),
+//                user.getPassword(),
+//                user.getUserRoles()
+//                    .stream()
+//                    .map(AuthUserRole::getRole)
+//                    .map(role -> new SimpleGrantedAuthority(role.getName()))
+//                    .toList()
+//        );
     }
 }

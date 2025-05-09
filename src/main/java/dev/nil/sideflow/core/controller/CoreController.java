@@ -1,16 +1,15 @@
 package dev.nil.sideflow.core.controller;
 
+import dev.nil.sideflow.core.dto.UpdateProfileDto;
 import dev.nil.sideflow.core.dto.UserProfileDto;
 import dev.nil.sideflow.core.dto.UserProfileRequest;
 import dev.nil.sideflow.core.dto.UserProfileResponse;
 import dev.nil.sideflow.core.mapper.CoreMapper;
+import dev.nil.sideflow.core.rest.UpdateProfileRequest;
 import dev.nil.sideflow.core.service.CoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/core")
@@ -27,6 +26,14 @@ public class CoreController {
 
         return coreService.getUserProfile(userProfile);
 
+    }
+
+    @PatchMapping("/profile")
+    public UserProfileDto updateProfile(@Valid @RequestBody UpdateProfileRequest request) {
+
+        UpdateProfileDto updateProfileDto = coreMapper.convertToUpdateProfileDto(request);
+
+        return coreService.updateProfile(updateProfileDto);
     }
 
 

@@ -5,7 +5,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import dev.nil.sideflow.auth.domain.entity.AuthUser;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -20,10 +23,18 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private long expirationMillis;
 
-    public String generateToken(String email, List<String> roles) {
+    public String generateToken(UserDetails userDetails) {
+
+        AuthUser authUser = (AuthUser) userDetails;
+
         return JWT.create()
-                  .withSubject(email)
-                  .withClaim("roles", roles)
+                  .withSubject(authUser.getId()
+                                       .toString())
+                  .withClaim("username", authUser.getUsername())
+                  .withClaim("roles", userDetails.getAuthorities()
+                                                 .stream()
+                                                 .map(GrantedAuthority::getAuthority)
+                                                 .toList())
                   .withIssuedAt(new Date())
                   .withExpiresAt(new Date(System.currentTimeMillis() + expirationMillis))
                   .sign(Algorithm.HMAC256(secret));
@@ -39,7 +50,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public String getEmail(String token) {
+    public String getSubject(String token) {
         return decodeToken(token).getSubject();
     }
 

@@ -1,6 +1,6 @@
 package dev.nil.sideflow.security;
 
-import dev.nil.sideflow.auth.domain.model.AuthUser;
+import dev.nil.sideflow.auth.domain.entity.AuthUser;
 import dev.nil.sideflow.auth.domain.repository.AuthUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -38,8 +39,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        String email = jwtTokenProvider.getEmail(token);
-        Optional<AuthUser> userOptional = authUserRepository.findByEmailWithRoles(email);
+        UUID id = UUID.fromString(jwtTokenProvider.getSubject(token));
+        List<String> roles = jwtTokenProvider.getRoles(token);
+
+        Optional<AuthUser> userOptional = authUserRepository.findById(id);
 
         if (userOptional.isEmpty()) {
             filterChain.doFilter(request, response);
@@ -47,17 +50,23 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         AuthUser user = userOptional.get();
-        List<GrantedAuthority> authorities = user.getUserRoles()
-                                                 .stream()
-                                                 // have to cast this to GrantedAuthority due to genrics
-                                                 // limitation for type safety (streams uses generics)
-                                                 .map(role -> (GrantedAuthority) new SimpleGrantedAuthority
-                                                         ("ROLE_" + role.getRole()
-                                                                        .getName()))
-                                                 .toList();
 
+        List<GrantedAuthority> authorities = roles.stream()
+                                                  .map(role -> (GrantedAuthority) new SimpleGrantedAuthority(role))
+                                                  .toList();
+
+//        List<GrantedAuthority> authorities = user.getUserRoles()
+//                                                 .stream()
+//                                                 // have to cast this to GrantedAuthority due to genrics
+//                                                 // limitation for type safety (streams uses generics)
+//                                                 .map(role -> (GrantedAuthority) new
+//                                                 SimpleGrantedAuthority
+//                                                         ("ROLE_" + role.getRole()
+//                                                                        .getName()))
+//                                                 .toList();
+//
         UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(user, null, authorities);
+                new UsernamePasswordAuthenticationToken(id, null, authorities);
 
         SecurityContextHolder.getContext()
                              .setAuthentication(authentication);

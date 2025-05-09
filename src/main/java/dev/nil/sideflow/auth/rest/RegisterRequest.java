@@ -1,4 +1,4 @@
-package dev.nil.sideflow.auth.dto;
+package dev.nil.sideflow.auth.rest;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

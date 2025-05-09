@@ -1,15 +1,15 @@
-package dev.nil.sideflow.core.dto;
+package dev.nil.sideflow.core.rest;
 
 import lombok.Builder;
 import lombok.Data;
 
-@Data
 @Builder
-public class UserProfileDto {
+@Data
+public class UpdateProfileRequest {
+
     private String firstName;
     private String lastName;
-    private String email;
     private String username;
-    private String notifications;
+    private String notification;
     private Boolean isPremium;
 }

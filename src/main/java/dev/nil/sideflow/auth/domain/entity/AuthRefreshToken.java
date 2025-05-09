@@ -1,4 +1,4 @@
-package dev.nil.sideflow.auth.domain.model;
+package dev.nil.sideflow.auth.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

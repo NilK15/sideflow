@@ -1,14 +1,14 @@
 package dev.nil.sideflow.auth.service;
 
-import dev.nil.sideflow.auth.domain.model.AuthRole;
-import dev.nil.sideflow.auth.domain.model.AuthUser;
-import dev.nil.sideflow.auth.domain.model.AuthUserRole;
-import dev.nil.sideflow.auth.domain.model.AuthUserRoleId;
+import dev.nil.sideflow.auth.domain.entity.AuthRole;
+import dev.nil.sideflow.auth.domain.entity.AuthUser;
+import dev.nil.sideflow.auth.domain.entity.AuthUserRole;
+import dev.nil.sideflow.auth.domain.entity.AuthUserRoleId;
 import dev.nil.sideflow.auth.domain.repository.AuthRoleRepository;
 import dev.nil.sideflow.auth.domain.repository.AuthUserRepository;
 import dev.nil.sideflow.auth.dto.AuthUserDto;
-import dev.nil.sideflow.auth.dto.LoginDto;
-import dev.nil.sideflow.auth.dto.LoginResponse;
+import dev.nil.sideflow.auth.dto.LoginRequestDto;
+import dev.nil.sideflow.auth.dto.LoginResponseDto;
 import dev.nil.sideflow.auth.dto.RegisterDto;
 import dev.nil.sideflow.auth.mapper.AuthMapper;
 import dev.nil.sideflow.common.Constants;
@@ -22,12 +22,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -107,21 +105,21 @@ public class AuthService {
         return authUserDto;
     }
 
-    public LoginResponse loginUser(LoginDto loginDto) {
+    public LoginResponseDto loginUser(LoginRequestDto loginRequestDto) {
 
         // Ensure user exists in db
-        authUserRepository.findByEmail(loginDto
+        authUserRepository.findByEmail(loginRequestDto
                                   .email())
                           .orElseThrow(() -> new IllegalStateException("User doesn't exist"));
 
         // jwt implementation to get access token
         String token = authenticateUser(
-                loginDto.email(),
-                loginDto.password());
+                loginRequestDto.email(),
+                loginRequestDto.password());
 
-        return LoginResponse.builder()
-                            .token(token)
-                            .build();
+        return LoginResponseDto.builder()
+                               .token(token)
+                               .build();
     }
 
     public String authenticateUser(String email, String password) {
@@ -141,14 +139,13 @@ public class AuthService {
                         password));
 
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        String userEmail = userDetails.getUsername();
 
-        List<String> roles = userDetails.getAuthorities()
-                                        .stream()
-                                        .map(GrantedAuthority::getAuthority)
-                                        .toList();
+//        List<String> roles = userDetails.getAuthorities()
+//                                        .stream()
+//                                        .map(GrantedAuthority::getAuthority)
+//                                        .toList();
 
-        return jwtTokenProvider.generateToken(userEmail, roles);
+        return jwtTokenProvider.generateToken(userDetails);
     }
 
 }

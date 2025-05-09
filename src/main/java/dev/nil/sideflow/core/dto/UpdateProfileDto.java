@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserProfileDto {
+public class UpdateProfileDto {
+
     private String firstName;
     private String lastName;
-    private String email;
     private String username;
     private String notifications;
     private Boolean isPremium;

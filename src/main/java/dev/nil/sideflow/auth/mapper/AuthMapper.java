@@ -1,7 +1,11 @@
 package dev.nil.sideflow.auth.mapper;
 
-import dev.nil.sideflow.auth.domain.model.AuthUser;
-import dev.nil.sideflow.auth.dto.*;
+import dev.nil.sideflow.auth.domain.entity.AuthUser;
+import dev.nil.sideflow.auth.dto.AuthUserDto;
+import dev.nil.sideflow.auth.dto.LoginRequestDto;
+import dev.nil.sideflow.auth.dto.RegisterDto;
+import dev.nil.sideflow.auth.rest.LoginRequest;
+import dev.nil.sideflow.auth.rest.RegisterRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -17,5 +21,5 @@ public interface AuthMapper {
 
     RegisterDto convertToRegisterDto(RegisterRequest request);
 
-    LoginDto convertToLoginDto(LoginRequest request);
+    LoginRequestDto convertToLoginDto(LoginRequest request);
 }
