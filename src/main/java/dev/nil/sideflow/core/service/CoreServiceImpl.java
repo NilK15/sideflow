@@ -34,11 +34,13 @@ public class CoreServiceImpl implements CoreService {
 
 
     @Override
-    public UserProfileResponse getUserProfile(UserProfileDto userProfileDto) {
+    public UserProfileResponse getUserProfileById() {
 
-        UserProfile userProfile = userProfileRepository.findByEmail(userProfileDto.getEmail())
+        String userId = getAuthenticatedUserId();
+
+        UserProfile userProfile = userProfileRepository.findById(UUID.fromString(userId))
                                                        .orElseThrow(() -> new UsernameNotFoundException(
-                                                               "Username not found"));
+                                                               "User id not found"));
 
         return coreMapper.convertToUserProfileResponse(userProfile);
 
@@ -78,6 +80,7 @@ public class CoreServiceImpl implements CoreService {
 
         userProfile.setAuthUser(authUser);
 
+        // Seems there isn't an elegant way to do this unless writing SQL query in JPA
         if (updateProfileDto.getFirstName() != null) {
             userProfile.setFirstName(updateProfileDto.getFirstName());
         }
@@ -91,7 +94,13 @@ public class CoreServiceImpl implements CoreService {
             userProfile.setIsPremium(updateProfileDto.getIsPremium());
         }
 
-
         return coreMapper.convertToUserProfileDto(userProfileRepository.save(userProfile));
+    }
+
+    @Override
+    public String getAuthenticatedUserId() {
+        return SecurityContextHolder.getContext()
+                                    .getAuthentication()
+                                    .getName();
     }
 }

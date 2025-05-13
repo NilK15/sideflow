@@ -11,8 +11,6 @@ import dev.nil.sideflow.auth.dto.LoginRequestDto;
 import dev.nil.sideflow.auth.dto.LoginResponseDto;
 import dev.nil.sideflow.auth.dto.RegisterDto;
 import dev.nil.sideflow.auth.mapper.AuthMapper;
-import dev.nil.sideflow.common.Constants;
-import dev.nil.sideflow.core.dto.CreateUserProfileDto;
 import dev.nil.sideflow.core.service.CoreService;
 import dev.nil.sideflow.exception.exceptions.RoleNotFoundException;
 import dev.nil.sideflow.exception.exceptions.UserAlreadyExistsException;
@@ -59,13 +57,17 @@ public class AuthService {
                 .email(authUser.getEmail())
                 .password(passwordEncoder.encode(authUser.getPassword()))
                 .username(authUser.getUsername())
+                .userType(authUser.getUserType())
                 .build();
+
 
         // Creates a new role by retrieving from db to assign to newly registered users (ROLE_USER)
         AuthRole role = authRoleRepository
-                .findByName(Constants.ROLE_USER)
-                .orElseThrow(() -> new RoleNotFoundException(Constants.ROLE_USER, "Default role ROLE_USER" +
-                        " not found."));
+                .findByName("ROLE_" + user.getUserType()
+                                          .name())
+                .orElseThrow(() -> new RoleNotFoundException("ROLE_" + user.getUserType()
+                                                                           .name(),
+                        "not found"));
 
         //Creates new AuthUserRole based on above user and role to store in auth_user_role table that has
         // relation with user and role
@@ -84,20 +86,13 @@ public class AuthService {
         // Assigning the authUserRole relationship to authUser
         user.setUserRoles(Set.of(userRole));
 
-
         // Saves in auth_user db and auth_user_role table (via cascading)
         // Also using this savedUser vs a DTO is better, as it is the instance managed by Hibernate, and
-        // it wants
-        // just one entity being passed around - a dto being a passed around is going to need to be accessed
-        // to retrieve the auth user from db anyway.
+        // it wants  just one entity being passed around - a dto being a passed around is going to need
+        // to be accessed to retrieve the auth user from db anyway.
         AuthUser savedUser = authUserRepository.save(user);
         AuthUserDto authUserDto = authMapper.convertToAuthUserDto(savedUser);
 
-        // Create a new user profile to pass to coreService to store in user_profile db
-        CreateUserProfileDto createUserProfileDto = CreateUserProfileDto.builder()
-                                                                        .userId(user.getId())
-                                                                        .email(authUser.getEmail())
-                                                                        .build();
         // Saves minimum info in user_profile table
         coreService.createDefaultUserProfile(savedUser);
 
@@ -139,11 +134,6 @@ public class AuthService {
                         password));
 
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
-
-//        List<String> roles = userDetails.getAuthorities()
-//                                        .stream()
-//                                        .map(GrantedAuthority::getAuthority)
-//                                        .toList();
 
         return jwtTokenProvider.generateToken(userDetails);
     }

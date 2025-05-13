@@ -1,5 +1,6 @@
 package dev.nil.sideflow.auth.domain.entity;
 
+import dev.nil.sideflow.auth.domain.UserType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +31,10 @@ public class AuthUser implements UserDetails {
 
     @Column(nullable = false)
     private String username;
+
+    @Enumerated(EnumType.STRING) // Store as text (FREELANCER, CLIENT)
+    @Column(nullable = false)
+    private UserType userType;
 
     // By default these are Fetch.Lazy - aka loads when I query authUser.getRoles
     // Fetch.eager would have automatically loaded these through the authUser retrieval.

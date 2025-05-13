@@ -7,10 +7,12 @@ import dev.nil.sideflow.core.dto.UserProfileResponse;
 
 public interface CoreService {
 
-    UserProfileResponse getUserProfile(UserProfileDto userProfileDto);
+    UserProfileResponse getUserProfileById();
 
     void createDefaultUserProfile(AuthUser authUser);
 
     UserProfileDto updateProfile(UpdateProfileDto updateProfileDto);
+
+    String getAuthenticatedUserId();
 
 }

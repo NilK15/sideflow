@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -25,11 +25,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public AuthUserDto register(@Valid @RequestBody RegisterRequest request) {
+
         // Sanitation, incase request has a bunch of other garbage fields coming in from some client -
         // mainly for public apis
         RegisterDto registerDto = authMapper.convertToRegisterDto(request);
         return authService.registerUser(registerDto);
     }
+
 
     @PostMapping("/login")
     public LoginResponseDto login(@Valid @RequestBody LoginRequest request) {

@@ -7,7 +7,9 @@ import dev.nil.sideflow.core.dto.UserProfileDto;
 import dev.nil.sideflow.core.dto.UserProfileRequest;
 import dev.nil.sideflow.core.dto.UserProfileResponse;
 import dev.nil.sideflow.core.rest.UpdateProfileRequest;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.UUID;
 
@@ -26,6 +28,7 @@ public interface CoreMapper {
 
     UpdateProfileDto convertToUpdateProfileDto(UpdateProfileRequest request);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     UserProfile convertToUserProfile(UpdateProfileDto updateProfileDto);
 
     UserProfileDto convertToUserProfileDto(UserProfile userProfile);

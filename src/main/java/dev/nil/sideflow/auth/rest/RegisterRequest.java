@@ -1,7 +1,9 @@
 package dev.nil.sideflow.auth.rest;
 
+import dev.nil.sideflow.auth.domain.UserType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -16,4 +18,7 @@ public class RegisterRequest {
 
     @NotBlank(message = "Username is required.")
     private String username;
+
+    @NotNull(message = "User type is required")
+    private UserType userType;
 }
